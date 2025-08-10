@@ -14,6 +14,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -64,16 +65,7 @@ public class RegenerateLootMod {
         if (world.getBlockEntity(position) != null) {
             BlockEntity chest = world.getBlockEntity(position);
             assert chest != null;
-            if (chest instanceof ChestBlockEntity chestEntity) {
-                ResourceLocation lootTableID = (chestEntity.lootTable);
-                if (lootTableID != null && !RegenerateLootMod.worldChestsPositions.contains(position)) {
-                    RegenerateLootMod.worldChestsLootTableIDs.add(lootTableID);
-                    RegenerateLootMod.worldChestsPositions.add(position);
-                    RegenerateLootMod.chestWorlds.add(world.dimension());
-                }
-            }
-
-            if (chest instanceof BarrelBlockEntity chestEntity) {
+            if (chest instanceof RandomizableContainerBlockEntity chestEntity) {
                 ResourceLocation lootTableID = (chestEntity.lootTable);
                 if (lootTableID != null && !RegenerateLootMod.worldChestsPositions.contains(position)) {
                     RegenerateLootMod.worldChestsLootTableIDs.add(lootTableID);
@@ -98,12 +90,9 @@ public class RegenerateLootMod {
                 if (world.getBlockEntity(position) != null) {
                     BlockEntity chest = world.getBlockEntity(position);
                     assert chest != null;
-                    if (chest instanceof ChestBlockEntity chestEntity) {
+                    if (chest instanceof RandomizableContainerBlockEntity chestEntity) {
                         world.setBlockAndUpdate(position, world.getBlockState(position));
-                        chestEntity.setLootTable(RegenerateLootMod.worldChestsLootTableIDs.get(i), rand.nextLong(100000000) + rand.nextLong(100000000));
-                    }
-                    if (chest instanceof BarrelBlockEntity chestEntity) {
-                        world.setBlockAndUpdate(position, world.getBlockState(position));
+                        chestEntity.clearContent();
                         chestEntity.setLootTable(RegenerateLootMod.worldChestsLootTableIDs.get(i), rand.nextLong(100000000) + rand.nextLong(100000000));
                     }
                 }
@@ -125,10 +114,8 @@ public class RegenerateLootMod {
             if (server.getLevel(RegenerateLootMod.chestWorlds.get(i)).getBlockEntity(position) != null) {
                 BlockEntity chest = server.getLevel(RegenerateLootMod.chestWorlds.get(i)).getBlockEntity(position);
                 assert chest != null;
-                if (chest instanceof ChestBlockEntity chestEntity) {
-                    chestEntity.setLootTable(RegenerateLootMod.worldChestsLootTableIDs.get(i), rand.nextLong(100000000) + rand.nextLong(100000000));
-                }
-                if (chest instanceof BarrelBlockEntity chestEntity) {
+                if (chest instanceof RandomizableContainerBlockEntity chestEntity) {
+                    chestEntity.clearContent();
                     chestEntity.setLootTable(RegenerateLootMod.worldChestsLootTableIDs.get(i), rand.nextLong(100000000) + rand.nextLong(100000000));
                 }
             }

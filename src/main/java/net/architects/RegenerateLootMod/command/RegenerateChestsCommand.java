@@ -6,9 +6,8 @@ import net.architects.RegenerateLootMod.RegenerateLootMod;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 
 import java.util.Random;
 
@@ -28,10 +27,8 @@ public class RegenerateChestsCommand {
             if (context.getSource().getLevel().getBlockEntity(position) != null) {
                 BlockEntity chest = context.getSource().getLevel().getBlockEntity(position);
                 assert chest != null;
-                if (chest instanceof ChestBlockEntity chestEntity) {
-                    chestEntity.setLootTable(RegenerateLootMod.worldChestsLootTableIDs.get(i), rand.nextLong(100000000) + rand.nextLong(100000000));
-                }
-                if (chest instanceof BarrelBlockEntity chestEntity) {
+                if (chest instanceof RandomizableContainerBlockEntity chestEntity) {
+                    chestEntity.clearContent();
                     chestEntity.setLootTable(RegenerateLootMod.worldChestsLootTableIDs.get(i), rand.nextLong(100000000) + rand.nextLong(100000000));
                 }
             }
